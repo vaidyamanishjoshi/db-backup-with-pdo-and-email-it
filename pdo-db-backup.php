@@ -1,27 +1,27 @@
 <?php
 //Edit below values with your own values.
-$db_server 			  = "Server or Host"; // Usually "localhost"		                                      
-$db_name 			    = "database_name"; // Your database name
-$db_user 			    = "db_username"; // Your database user name
-$db_pass 			    = "db_password"; // Your database user password
-$site_url			    = "https://yourdomain.com"; // Site url
-$email_host       = "mail.yourdomain.com"; //email sending domain
-$smtp_username    = "from@yourdomain.com";
-$smtp_pass        = "password_of_from@yourdomain.com";
-$from_email 		  = "from@yourdoman.com";
-$from_name 			  = "From Your Site Name";
-$mail_to1  			  = "sender@email.com"; // To which email db get sent.
-$mail_to1_name   	= 'Mr XYZ'; // To whom email get sent
-$mail_to2        	= ''; // Optional
-$mail_to2_name   	= ''; // Optional
+$db_server 			= "Server or Host"; // Usually "localhost"		                                      
+$db_name 			= "database_name"; // Your database name
+$db_user 			= "db_username"; // Your database user name
+$db_pass 			= "db_password"; // Your database user password
+$site_url			= "https://yourdomain.com"; // Site url
+$email_host       		= "mail.yourdomain.com"; //email sending domain
+$smtp_username   		= "from@yourdomain.com";
+$smtp_pass        		= "password_of_from@yourdomain.com";
+$from_email 		  	= "from@yourdoman.com";
+$from_name 			= "From Your Site Name";
+$mail_to1  			= "sender@email.com"; // To which email db get sent.
+$mail_to1_name   		= 'Mr XYZ'; // To whom email get sent
+$mail_to2        		= ''; // Optional
+$mail_to2_name   		= ''; // Optional
 
-$save_dir			      = './'; // Will be saved temporary file in same folder where this script is kept
-$file_name_prefix	  = 'prefix_name_';
-$phpmailer_dir_path = "PHPMailer/class.phpmailer.php";
-$time_zone          = "Asia/Kolkata";
-$compression        = "true"; // true or false. True for sql.gz and false fpr .sql
-$date = date('d_F_Y_H_i_s');
-$delete_bkupfile_after_email  = "Yes"; // Yes or No
+$save_dir			= './'; // Will be saved temporary file in same folder where this script is kept
+$file_name_prefix	  	= 'prefix_name_';
+$phpmailer_dir_path 		= "PHPMailer/class.phpmailer.php";
+$time_zone          		= "Asia/Kolkata";
+$compression        		= "true"; // true or false. True for sql.gz and false fpr .sql
+$date 				= date('d_F_Y_H_i_s');
+$delete_bkupfile_after_email  	= "Yes"; // Yes or No
 
 /*
 ---- Do NOT EDIT BELOW -----
