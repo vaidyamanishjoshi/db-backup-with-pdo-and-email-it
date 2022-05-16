@@ -42,50 +42,50 @@ $backup_config = array(
 $backup_db =  backupDB($backup_config);
 
 if($backup_db){
-        $files = array_merge(glob("./*.sql.gz"), glob("./*.sql"));
-        $files = array_combine($files, array_map("filemtime", $files));
-        arsort($files);
-        $newest_file = key($files);
-        include($phpmailer_dir_path);
-				$mail = new PHPMailer();
-				$mail->IsHTML(true); 
-				$mail->Host = $email_host; // SMTP server
-				$mail->AddAddress($mail_to1, $mail_to1_name);
-        if(!empty($mail_to2)){
-          $mail->AddAddress($mail_to2, $mail_to2_name);
-        }			
-				$mail->IsSMTP();
-				$mail->SMTPAuth = true;
-				$mail->SMTPSecure = 'tls'; // tls or ssl
-				$mail->Mailer = "smtp";
-				$mail->SMTPDebug = false;
-				$mail->Username = $smtp_username;
-				$mail->Password = $smtp_pass;
-				$mail->Port = 587;  // set the SMTP port , 587 if tls used, 465 if ssl used.
-				$mail->AddReplyTo($from_email, $from_email_name);
-				$mail->AddCustomHeader( "X-Confirm-Reading-To:".$from_email."" );
-				$mail->AddCustomHeader( "Return-Receipt-To:".$from_email."" );
-				$mail->ConfirmReadingTo = $from_email;
-				$mail->From = $from_email; // Your Full Email ID on your Domain
-				$mail->FromName = $from_email_name; // Your name or Domain
-			  $mail->WordWrap = 50; 
-			  $mail->Subject = '['.$from_name.'] Cron Backup MySQL On - ' . $date;
-			  $mail->Body    = $backup_db.' File is attached via cron';
-			    if (!$mail->AddAttachment($newest_file)) {   
-				  echo 'Erreur : ' . $mail->ErrorInfo . "\n";
-				  $mail->Body .= "\n" . 'Erreur : ' . $mail->ErrorInfo;
-			    }
-			    if (!$mail->Send()){
-				  echo 'Message could not be sent. <p>';
-				  echo 'Mailer Error: ' . $mail->ErrorInfo;
-				  exit;
-			    }
-				  echo 'Message has been sent';
-          if($delete_bkupfile_after_email=='Yes'){
-				    unlink($newest_file); 
-          }
-	
+        	$files = array_merge(glob("./*.sql.gz"), glob("./*.sql"));
+        	$files = array_combine($files, array_map("filemtime", $files));
+       		arsort($files);
+        	$newest_file = key($files);
+        	include($phpmailer_dir_path);
+		$mail = new PHPMailer();
+		$mail->IsHTML(true); 
+		$mail->Host = $email_host; // SMTP server
+		$mail->AddAddress($mail_to1, $mail_to1_name);
+        	if(!empty($mail_to2)){
+          		$mail->AddAddress($mail_to2, $mail_to2_name);
+        	}			
+		$mail->IsSMTP();
+		$mail->SMTPAuth = true;
+		$mail->SMTPSecure = 'tls'; // tls or ssl
+		$mail->Mailer = "smtp";
+		$mail->SMTPDebug = false;
+		$mail->Username = $smtp_username;
+		$mail->Password = $smtp_pass;
+		$mail->Port = 587;  // set the SMTP port , 587 if tls used, 465 if ssl used.
+		$mail->AddReplyTo($from_email, $from_email_name);
+		$mail->AddCustomHeader( "X-Confirm-Reading-To:".$from_email."" );
+		$mail->AddCustomHeader( "Return-Receipt-To:".$from_email."" );
+		$mail->ConfirmReadingTo = $from_email;
+		$mail->From = $from_email; // Your Full Email ID on your Domain
+		$mail->FromName = $from_email_name; // Your name or Domain
+		$mail->WordWrap = 50; 
+		$mail->Subject = '['.$from_name.'] Cron Backup MySQL On - ' . $date;
+		$mail->Body    = $backup_db.' File is attached via cron';
+		   if (!$mail->AddAttachment($newest_file)) {   
+			  echo 'Erreur : ' . $mail->ErrorInfo . "\n";
+			  $mail->Body .= "\n" . 'Erreur : ' . $mail->ErrorInfo;
+		   }
+		   if (!$mail->Send()){
+			  echo 'Message could not be sent. <p>';
+			  echo 'Mailer Error: ' . $mail->ErrorInfo;
+			  exit;
+		   }
+		  echo 'Message has been sent';
+          	if($delete_bkupfile_after_email=='Yes'){
+		    unlink($newest_file); 
+		}		
 }
+
 function backupDB(array $config): string
 {
     $db = new PDO("mysql:host={$config['DB_HOST']};dbname={$config['DB_NAME']}; charset=utf8", $config['DB_USERNAME'], $config['DB_PASSWORD']);
