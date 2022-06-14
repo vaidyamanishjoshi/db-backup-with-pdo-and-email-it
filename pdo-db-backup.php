@@ -15,11 +15,11 @@ $mail_to1_name   		= 'Mr XYZ'; // To whom email get sent
 $mail_to2        		= ''; // Optional
 $mail_to2_name   		= ''; // Optional
 
-$save_dir			= './'; // Will be saved temporary file in same folder where this script is kept
-$file_name_prefix	  	= 'prefix_name_';
+$save_dir			= ''; // Will be saved temporary file in same folder where this script is kept. keep empty for same folder where this file is..
+$file_name_prefix	  	= 'prefix_name_'; //prefix name to your backed up db file.. e.g. prefix_name_2022_06_14_19_31_00.sql.gz
 $phpmailer_dir_path 		= "PHPMailer/class.phpmailer.php";
 $time_zone          		= "Asia/Kolkata";
-$compression        		= "true"; // true or false. True for sql.gz and false fpr .sql
+$compression        		= true; // true or false. True for sql.gz and false fpr .sql
 $date 				= date('d_F_Y_H_i_s');
 $delete_bkupfile_after_email  	= "Yes"; // Yes or No
 
@@ -46,7 +46,7 @@ if($backup_db){
         	$files = array_combine($files, array_map("filemtime", $files));
        		arsort($files);
         	$newest_file = key($files);
-        	include($phpmailer_dir_path);
+        	include(''.$phpmailer_dir_path.'');
 		$mail = new PHPMailer();
 		$mail->IsHTML(true); 
 		$mail->Host = $email_host; // SMTP server
@@ -62,12 +62,12 @@ if($backup_db){
 		$mail->Username = $smtp_username;
 		$mail->Password = $smtp_pass;
 		$mail->Port = 587;  // set the SMTP port , 587 if tls used, 465 if ssl used.
-		$mail->AddReplyTo($from_email, $from_email_name);
+		$mail->AddReplyTo($from_email, $from_name);
 		$mail->AddCustomHeader( "X-Confirm-Reading-To:".$from_email."" );
 		$mail->AddCustomHeader( "Return-Receipt-To:".$from_email."" );
 		$mail->ConfirmReadingTo = $from_email;
 		$mail->From = $from_email; // Your Full Email ID on your Domain
-		$mail->FromName = $from_email_name; // Your name or Domain
+		$mail->FromName = $from_name; // Your name or Domain
 		$mail->WordWrap = 50; 
 		$mail->Subject = '['.$from_name.'] Cron Backup MySQL On - ' . $date;
 		$mail->Body    = $backup_db.' File is attached via cron';
