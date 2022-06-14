@@ -19,7 +19,7 @@ $save_dir			= ''; // Will be saved temporary file in same folder where this scri
 $file_name_prefix	  	= 'prefix_name_'; //prefix name to your backed up db file.. e.g. prefix_name_2022_06_14_19_31_00.sql.gz
 $phpmailer_dir_path 		= "PHPMailer/class.phpmailer.php";
 $time_zone          		= "Asia/Kolkata";
-$compression        		= true; // true or false. True for sql.gz and false fpr .sql
+$compression        		= true; // true or false. True for sql.gz (small file size of bkup) and false for .sql (bigger file size of bkup)
 $date 				= date('d_F_Y_H_i_s');
 $delete_bkupfile_after_email  	= "Yes"; // Yes or No
 
