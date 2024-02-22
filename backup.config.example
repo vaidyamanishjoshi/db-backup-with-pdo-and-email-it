@@ -1,0 +1,28 @@
+# Edit below values with your own values.
+# Configuration data for Blesta Backup
+
+#MySQL Database Info
+DB_SERVER 		                = "localhost"               # Usually localhost
+DB_NAME 		                = "dbname"                  # Name of database
+DB_USER 		                = "dbuser"                  # Database user
+DB_PASS 		                = "password"                # DB User's Password
+
+# SMTP Server Details
+EMAIL_HOST                      = "smtp.server.com"
+SMTP_USERNAME                   = "user@example.com"
+SMTP_PASS                       = "password"
+FROM_EMAIL 		                = "sender@example.com"
+FROM_NAME 		                = "Web Server"
+MAIL_TO1  		                = "email@example.com"
+MAIL_TO1_NAME                   = 'Johnny Appleseed'
+MAIL_TO2                        = ''
+MAIL_TO2_NAME                   = ''
+
+# Backup Specific settings
+
+SAVE_DIR			            = '/var/lib/backups/'
+FILE_NAME_PREFIX	  	        = 'backup-'
+TIME_ZONE          		        = "Europe/London"
+COMPRESSION        		        = true
+DATE_FORMAT                     = 'd_F_Y_H_i_s'
+DELETE_BKUPFILE_AFTER_EMAIL  	= "No"
