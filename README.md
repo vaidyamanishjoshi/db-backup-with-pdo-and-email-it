@@ -4,8 +4,9 @@ Take backup of MySQL Database with help of PDO PHP and email it with PHPMailer t
 
 USAGE
 
-```bash
 Add your config settings into the backup.config file (example settings in backup.config.example)
+
+```bash
 
 execute as
 
