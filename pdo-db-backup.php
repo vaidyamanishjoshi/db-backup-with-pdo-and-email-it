@@ -1,28 +1,38 @@
 <?php
+use PDO;
+use PHPMailer\PHPMailer\PHPMailer;
+
+require __DIR__ . "/vendor/autoload.php";
+
+$CfgFile = "backup.config";
+
+$Cfg = parse_ini_file( $CfgFile );
+
+
 //Edit below values with your own values.
-$db_server 			= "Server or Host"; // Usually "localhost"		                                      
-$db_name 			= "database_name"; // Your database name
-$db_user 			= "db_username"; // Your database user name
-$db_pass 			= "db_password"; // Your database user password
-$site_url			= "https://yourdomain.com"; // Site url
-$email_host       		= "mail.yourdomain.com"; //email sending domain
-$smtp_username   		= "from@yourdomain.com";
-$smtp_pass        		= "password_of_from@yourdomain.com";
-$from_email 		  	= "from@yourdoman.com";
-$from_name 			= "From Your Site Name";
-$mail_to1  			= "sender@email.com"; // To which email db get sent.
-$mail_to1_name   		= 'Mr XYZ'; // To whom email get sent
-$mail_to2        		= ''; // Optional
-$mail_to2_name   		= ''; // Optional
+$db_server 		                = $Cfg["DB_SERVER"];
+$db_name 		                = $Cfg["DB_NAME"];
+$db_user 		                = $Cfg["DB_USER"];
+$db_pass 		                = $Cfg["DB_PASS"];
 
-$save_dir			= ''; // Will be saved temporary file in same folder where this script is kept. keep empty for same folder where this file is..
-$file_name_prefix	  	= 'prefix_name_'; //prefix name to your backed up db file.. e.g. prefix_name_2022_06_14_19_31_00.sql.gz
-$phpmailer_dir_path 		= "PHPMailer/class.phpmailer.php";
-$time_zone          		= "Asia/Kolkata";
-$compression        		= true; // true or false. True for sql.gz (small file size of bkup) and false for .sql (bigger file size of bkup)
-$date 				= date('d_F_Y_H_i_s');
-$delete_bkupfile_after_email  	= "Yes"; // Yes or No
+$site_url		                = $Cfg["SITE_URL"];
+$email_host                     = $Cfg["EMAIL_HOST"];
+$smtp_username                  = $Cfg["SMTP_USERNAME"];
+$smtp_pass                      = $Cfg["SMTP_PASS"];
+$from_email 	                = $Cfg["FROM_EMAIL"];
+$from_name 		                = $Cfg["FROM_NAME"];
+$mail_to1  		                = $Cfg["MAIL_TO1"];
+$mail_to1_name                  = $Cfg["MAIL_TO1_NAME"];
+$mail_to2                       = $Cfg["MAIL_TO2"];
+$mail_to2_name                  = $Cfg["MAIL_TO2_NAME"];
 
+$save_dir		                = $Cfg["SAVE_DIR"];
+$file_name_prefix	            = $Cfg["FILE_NAME_PREFIX"];
+$time_zone          	        = $Cfg["TIME_ZONE"];
+$compression        	        = $Cfg["COMPRESSION"];
+$delete_bkupfile_after_email  	= $Cfg["DELETE_BKUPFILE_AFTER_EMAIL"];
+
+$date 				            = date( $Cfg["DATE_FORMAT"] );
 /*
 ---- Do NOT EDIT BELOW -----
 */
@@ -41,49 +51,50 @@ $backup_config = array(
 
 $backup_db =  backupDB($backup_config);
 
-if($backup_db){
-        	$files = array_merge(glob("./*.sql.gz"), glob("./*.sql"));
-        	$files = array_combine($files, array_map("filemtime", $files));
-       		arsort($files);
-        	$newest_file = key($files);
-        	include(''.$phpmailer_dir_path.'');
-		$mail = new PHPMailer();
-		$mail->IsHTML(true); 
-		$mail->Host = $email_host; // SMTP server
-		$mail->AddAddress($mail_to1, $mail_to1_name);
-        	if(!empty($mail_to2)){
-          		$mail->AddAddress($mail_to2, $mail_to2_name);
-        	}			
-		$mail->IsSMTP();
-		$mail->SMTPAuth = true;
-		$mail->SMTPSecure = 'tls'; // tls or ssl
-		$mail->Mailer = "smtp";
-		$mail->SMTPDebug = false;
-		$mail->Username = $smtp_username;
-		$mail->Password = $smtp_pass;
-		$mail->Port = 587;  // set the SMTP port , 587 if tls used, 465 if ssl used.
-		$mail->AddReplyTo($from_email, $from_name);
-		$mail->AddCustomHeader( "X-Confirm-Reading-To:".$from_email."" );
-		$mail->AddCustomHeader( "Return-Receipt-To:".$from_email."" );
-		$mail->ConfirmReadingTo = $from_email;
-		$mail->From = $from_email; // Your Full Email ID on your Domain
-		$mail->FromName = $from_name; // Your name or Domain
-		$mail->WordWrap = 50; 
-		$mail->Subject = '['.$from_name.'] Cron Backup MySQL On - ' . $date;
-		$mail->Body    = $backup_db.' File is attached via cron';
-		   if (!$mail->AddAttachment($newest_file)) {   
-			  echo 'Erreur : ' . $mail->ErrorInfo . "\n";
-			  $mail->Body .= "\n" . 'Erreur : ' . $mail->ErrorInfo;
-		   }
-		   if (!$mail->Send()){
-			  echo 'Message could not be sent. <p>';
-			  echo 'Mailer Error: ' . $mail->ErrorInfo;
-			  exit;
-		   }
-		  echo 'Message has been sent';
-          	if($delete_bkupfile_after_email=='Yes'){
-		    unlink($newest_file); 
-		}		
+if($backup_db) {
+
+    $files = array_merge(glob("./*.sql.gz"), glob("./*.sql"));
+    $files = array_combine($files, array_map("filemtime", $files));
+    arsort($files);
+    $newest_file = key($files);
+
+    $mail = new PHPMailer();
+    $mail->IsHTML(true); 
+    $mail->Host = $email_host; // SMTP server
+    $mail->AddAddress($mail_to1, $mail_to1_name);
+    if(!empty($mail_to2)){
+        $mail->AddAddress($mail_to2, $mail_to2_name);
+    }			
+    $mail->IsSMTP();
+    $mail->SMTPAuth = true;
+    $mail->SMTPSecure = 'tls'; // tls or ssl
+    $mail->Mailer = "smtp";
+    $mail->SMTPDebug = false;
+    $mail->Username = $smtp_username;
+    $mail->Password = $smtp_pass;
+    $mail->Port = 587;  // set the SMTP port , 587 if tls used, 465 if ssl used.
+    $mail->AddReplyTo($from_email, $from_name);
+    $mail->AddCustomHeader( "X-Confirm-Reading-To:".$from_email."" );
+    $mail->AddCustomHeader( "Return-Receipt-To:".$from_email."" );
+    $mail->ConfirmReadingTo = $from_email;
+    $mail->From = $from_email; // Your Full Email ID on your Domain
+    $mail->FromName = $from_name; // Your name or Domain
+    $mail->WordWrap = 50; 
+    $mail->Subject = '['.$from_name.'] Cron Backup MySQL On - ' . $date;
+    $mail->Body    = $backup_db.' File is attached via cron';
+        if (!$mail->AddAttachment($newest_file)) {   
+            echo 'Error : ' . $mail->ErrorInfo . "\n";
+            $mail->Body .= "\n" . 'Error : ' . $mail->ErrorInfo;
+        }
+        if (!$mail->Send()){
+            echo 'Message could not be sent. <p>';
+            echo 'Mailer Error: ' . $mail->ErrorInfo;
+            exit;
+        }
+        echo 'Message has been sent';
+        if($delete_bkupfile_after_email=='Yes'){
+        unlink($newest_file); 
+    }		
 }
 
 function backupDB(array $config): string
@@ -95,10 +106,10 @@ function backupDB(array $config): string
     $do_compress = $config['COMPRESS'];
 
     if ($do_compress) {
-        $save_string = $config['SAVE_AS'] . $config['SAVE_DIR'] . date($config['APPEND_DATE_FORMAT']) . '.sql.gz';
+        $save_string = $config['SAVE_DIR'] . $config['SAVE_AS'] . date($config['APPEND_DATE_FORMAT']) . '.sql.gz';
         $zp = gzopen($save_string, "a9");
     } else {
-        $save_string = $config['SAVE_AS'] . $config['SAVE_DIR'] . date($config['APPEND_DATE_FORMAT']) . '.sql';
+        $save_string = $config['SAVE_DIR'] . $config['SAVE_AS'] . date($config['APPEND_DATE_FORMAT']) . '.sql';
         $handle = fopen($save_string, 'a+');
     }
 
@@ -229,5 +240,3 @@ function backupDB(array $config): string
 	return "{$config['DB_NAME']} saved as $save_string";
 }
 
-
-?>

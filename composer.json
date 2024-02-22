@@ -1,0 +1,17 @@
+{
+    "name": "vaidyamanishjoshi/pdo-db-backup",
+    "authors": [
+        {
+            "name": "vaidyamanishjoshi",
+            "homepage": "https://github.com/vaidyamanishjoshi"
+        },
+        {
+            "name": "Jon Morby",
+            "homepage": "https://github.com/jpmorby"
+        }
+    ],
+    "require": {
+        "php": "^7.4|^8.0",
+        "phpmailer/phpmailer": "^6.9"
+    }
+}
