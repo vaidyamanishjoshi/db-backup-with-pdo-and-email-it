@@ -2,6 +2,8 @@
 use PDO;
 use PHPMailer\PHPMailer\PHPMailer;
 
+require __DIR__ . "/vendor/autoload.php";
+
 $CfgFile = "backup.config";
 
 $Cfg = parse_ini_file( $CfgFile );
@@ -29,7 +31,6 @@ $file_name_prefix	            = $Cfg["FILE_NAME_PREFIX"];
 $time_zone          	        = $Cfg["TIME_ZONE"];
 $compression        	        = $Cfg["COMPRESSION"];
 $delete_bkupfile_after_email  	= $Cfg["DELETE_BKUPFILE_AFTER_EMAIL"];
-$blesta_config			        = $Cfg["BLESTA_CONFIG"];
 
 $date 				            = date( $Cfg["DATE_FORMAT"] );
 /*
